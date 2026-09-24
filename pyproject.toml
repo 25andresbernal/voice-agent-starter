@@ -18,7 +18,15 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "pytest-asyncio>=0.23", "ruff>=0.5"]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.5",
+    # starlette.testclient (used by fastapi.testclient in tests/test_server.py)
+    # prefers httpx2 over httpx and warns without it. Installed so the test
+    # suite runs warning-free instead of silencing a real deprecation notice.
+    "httpx2>=2.0",
+]
 
 [project.scripts]
 voice-agent = "voice_agent.cli:main"

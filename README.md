@@ -35,19 +35,19 @@ network access. Real captured output, trimmed for length:
 
 ```
 $ uv run voice-agent demo
-Simulated call complete. Transcript written to transcripts/demo-20260924T044159-4595aa.jsonl
+Simulated call complete. Transcript written to transcripts/demo-20260924T044813-d4ade9.jsonl
 
 {"call_id": "demo-...", "turn": 1, "speaker": "assistant", "text": "Thanks for calling Riverside Wellness Studio. How can I help you today?", ...}
 {"call_id": "demo-...", "turn": 2, "speaker": "user", "text": "Hi, I'd like to book a massage for this Friday.", ...}
 {"call_id": "demo-...", "turn": 3, "speaker": "tool", "text": "", "tool_call": {"name": "look_up_availability", "arguments": {"service": "massage", "date": "2026-09-25"}, "result": {"available_times": ["09:00", "11:00", "13:00"]}}, ...}
-{"call_id": "demo-...", "turn": 4, "speaker": "assistant", "text": "I have openings Friday at ten a.m., one p.m., and three p.m. Which time works best for you?", "latency_ms": 550, ...}
+{"call_id": "demo-...", "turn": 4, "speaker": "assistant", "text": "I have openings Friday at nine a.m., eleven a.m., and one p.m. Which time works best for you?", "latency_ms": 550, ...}
 {"call_id": "demo-...", "turn": 5, "speaker": "user", "text": "One p.m. works great. My name is Jordan.", ...}
 {"call_id": "demo-...", "turn": 6, "speaker": "tool", "text": "", "tool_call": {"name": "book_appointment", "arguments": {"service": "massage", "date": "2026-09-25", "time": "13:00", "customer_name": "Jordan"}, "result": {"status": "confirmed", "booking_id": "bk_1ed1dcb6b7"}}, ...}
 {"call_id": "demo-...", "turn": 7, "speaker": "assistant", "text": "You're all set for one p.m. on Friday, Jordan. You'll get a text confirmation shortly. Is there anything else I can help with?", "latency_ms": 500, ...}
 {"call_id": "demo-...", "turn": 8, "speaker": "user", "text": "No, that's everything. Thank you!", ...}
 {"call_id": "demo-...", "turn": 9, "speaker": "assistant", "text": "You're welcome. Thanks for calling Riverside Wellness Studio, have a great day.", "latency_ms": 300, ...}
 
-Call quality scorecard: transcripts/demo-20260924T044159-4595aa.jsonl
+Call quality scorecard: transcripts/demo-20260924T044813-d4ade9.jsonl
 ------------------------------------------------------------------------------
 Assistant turn length   100.0  avg 16.2 words/turn (target <= 40), max 23
 One question per turn   100.0  0 of 4 turns asked more than one question
@@ -57,6 +57,8 @@ Response latency        100.0  avg 450 ms (target <= 1500 ms), max 550 ms
 ------------------------------------------------------------------------------
 Overall score: 100.0/100 (A)
 ```
+
+Note the assistant's spoken slot list (turn 4: "nine a.m., eleven a.m., and one p.m.") is generated from the actual `look_up_availability` tool result (turn 3), and the booked time (turn 6: `"time": "13:00"`) is the same slot the assistant just offered and the caller picked ("one p.m."). The script composes its lines from real tool output rather than hand-typed text, so they cannot drift apart. See `src/voice_agent/fake_realtime_client.py`.
 
 Five more example transcripts, each engineered to fail exactly one
 scorecard metric, are in `examples/transcripts/`; run `voice-agent eval` on
@@ -226,24 +228,34 @@ https://platform.openai.com/docs/pricing, fetched 2026-09-23:
 | Audio output | $64.00 / 1M tokens |
 | Cached audio input | $0.40 / 1M tokens |
 
-**VERIFY:** OpenAI publishes Realtime audio pricing per token, not per
-minute, and the pricing page does not state an audio-tokens-per-minute
-throughput figure. Converting the numbers above into a per-call-minute
-cost requires that conversion factor; pull it from the OpenAI usage
-dashboard on a real call rather than assuming a number here. Once you have
-it, the model cost of one call is:
+OpenAI bills Realtime audio per token, not per minute, but the audio
+token rate is itself documented: the "Per-Response costs" section of
+https://platform.openai.com/docs/guides/realtime-costs, fetched
+2026-09-23, states that "audio tokens in user messages are 1 token per
+100 ms of audio" and "audio tokens in assistant messages are 1 token per
+50 ms of audio." That is 10 input tokens/sec (600/min) and 20 output
+tokens/sec (1,200/min), and gives an exact per-minute cost:
 
 ```
-minutes x tokens_per_minute x ($32 x input_share + $64 x output_share) / 1,000,000
+input:  600 tokens/min x $32  / 1,000,000 = $0.0192 / min of caller audio
+output: 1,200 tokens/min x $64 / 1,000,000 = $0.0768 / min of assistant audio
 ```
 
-Approximate all-in cost per call minute, Twilio side only (fully verified
-above) plus OpenAI (VERIFY pending the conversion factor):
+Approximate all-in cost per call minute, assuming continuous audio on both
+legs (a minute where the caller is talking and a minute where the
+assistant is talking, which is the common worst-case way to budget a
+back-and-forth call):
 
-| Component | Per minute |
-|---|---|
-| Twilio (trunk + local number amortized) | ~$0.01 |
-| OpenAI Realtime audio | VERIFY |
+| Component | Per minute | Basis |
+|---|---|---|
+| Twilio (trunk termination + local number amortized) | ~$0.01 | Twilio SIP Trunking pricing page, fetched 2026-09-23 |
+| OpenAI Realtime audio (input + output) | ~$0.096 ($0.0192 + $0.0768) | OpenAI Realtime costs guide's documented token-per-ms rate x OpenAI pricing page's per-token rate, both fetched 2026-09-23 |
+| **Total** | **~$0.11 / min** | sum of the above |
+
+This does not include cached-input discounts (silence and repeated audio
+context can be billed at $0.40/1M tokens instead of $32/1M once caching
+applies), tool-call token cost, or Twilio's toll-free/high-cost-zone
+rates; treat ~$0.11/min as a starting budget number, not an invoice.
 
 ## Roadmap
 
