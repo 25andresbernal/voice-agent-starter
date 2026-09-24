@@ -1,0 +1,9 @@
+{"call_id": "example-premature-close", "turn": 1, "speaker": "assistant", "text": "Thanks for calling, how can I help?", "timestamp": "2026-09-20T09:00:00+00:00", "tool_call": null, "latency_ms": null}
+{"call_id": "example-premature-close", "turn": 2, "speaker": "user", "text": "I want to reschedule my appointment.", "timestamp": "2026-09-20T09:00:02+00:00", "tool_call": null, "latency_ms": null}
+{"call_id": "example-premature-close", "turn": 3, "speaker": "assistant", "text": "Done, you're all set. Have a great day!", "timestamp": "2026-09-20T09:00:02.500000+00:00", "tool_call": null, "latency_ms": 500}
+{"call_id": "example-premature-close", "turn": 4, "speaker": "user", "text": "Wait, you didn't ask when I wanted to move it to.", "timestamp": "2026-09-20T09:00:03.500000+00:00", "tool_call": null, "latency_ms": null}
+{"call_id": "example-premature-close", "turn": 5, "speaker": "assistant", "text": "You're right, I'm sorry. What day works better for you?", "timestamp": "2026-09-20T09:00:04.200000+00:00", "tool_call": null, "latency_ms": 700}
+{"call_id": "example-premature-close", "turn": 6, "speaker": "user", "text": "Next Tuesday.", "timestamp": "2026-09-20T09:00:06.200000+00:00", "tool_call": null, "latency_ms": null}
+{"call_id": "example-premature-close", "turn": 7, "speaker": "assistant", "text": "Got it, I've moved it to Tuesday. Anything else?", "timestamp": "2026-09-20T09:00:06.600000+00:00", "tool_call": null, "latency_ms": 400}
+{"call_id": "example-premature-close", "turn": 8, "speaker": "user", "text": "No, that's it.", "timestamp": "2026-09-20T09:00:07.600000+00:00", "tool_call": null, "latency_ms": null}
+{"call_id": "example-premature-close", "turn": 9, "speaker": "assistant", "text": "Great, take care now.", "timestamp": "2026-09-20T09:00:07.900000+00:00", "tool_call": null, "latency_ms": 300}

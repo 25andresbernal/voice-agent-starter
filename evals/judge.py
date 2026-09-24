@@ -82,9 +82,7 @@ class OpenAIJudge:
     def score(self, turns: list[dict[str, Any]]) -> JudgeResult:
         import httpx
 
-        transcript_text = "\n".join(
-            f"{t['speaker']}: {t['text']}" for t in turns if t.get("text")
-        )
+        transcript_text = "\n".join(f"{t['speaker']}: {t['text']}" for t in turns if t.get("text"))
         prompt = RUBRIC_PROMPT.format(transcript=transcript_text)
 
         resp = httpx.post(

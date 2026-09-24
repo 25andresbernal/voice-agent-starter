@@ -29,9 +29,9 @@ def book_appointment(arguments: dict[str, Any]) -> dict[str, Any]:
     time = arguments["time"]
     customer_name = arguments["customer_name"]
 
-    booking_id = "bk_" + hashlib.sha256(
-        f"{service}:{date}:{time}:{customer_name}".encode()
-    ).hexdigest()[:10]
+    booking_id = (
+        "bk_" + hashlib.sha256(f"{service}:{date}:{time}:{customer_name}".encode()).hexdigest()[:10]
+    )
 
     return {
         "status": "confirmed",

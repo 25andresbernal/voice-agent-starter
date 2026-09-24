@@ -33,11 +33,12 @@ def look_up_availability(arguments: dict[str, Any]) -> dict[str, Any]:
     service = arguments["service"]
     date = arguments["date"]
 
-    # Deterministic pseudo-random pick of 3 open slots for this
+    # Deterministic pseudo-random pick of 3 distinct open slots for this
     # (service, date) pair, so repeated calls and tests are stable.
-    seed = hashlib.sha256(f"{service}:{date}".encode()).hexdigest()
-    offsets = sorted({int(seed[i : i + 2], 16) % len(_SLOT_POOL) for i in range(0, 6, 2)})
-    slots = [_SLOT_POOL[i] for i in offsets] or [_SLOT_POOL[0]]
+    seed = hashlib.sha256(f"{service}:{date}".encode()).digest()
+    order = sorted(range(len(_SLOT_POOL)), key=lambda i: seed[i % len(seed)])
+    offsets = sorted(order[:3])
+    slots = [_SLOT_POOL[i] for i in offsets]
 
     return {
         "service": service,

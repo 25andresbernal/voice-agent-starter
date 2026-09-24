@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import secrets
 import sys
 from datetime import datetime, timezone
 
@@ -19,7 +20,7 @@ def _cmd_demo(args: argparse.Namespace) -> int:
     no API keys, and score the resulting transcript."""
     from evals.scorecard import render_table, score_file
 
-    call_id = f"demo-{datetime.now(timezone.utc):%Y%m%dT%H%M%S}"
+    call_id = f"demo-{datetime.now(timezone.utc):%Y%m%dT%H%M%S}-{secrets.token_hex(3)}"
     registry = build_default_registry()
     connection = FakeRealtimeConnection(script=build_demo_script())
     transcript = TranscriptWriter(call_id=call_id)

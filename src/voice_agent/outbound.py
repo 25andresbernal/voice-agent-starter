@@ -22,7 +22,7 @@ def build_outbound_twiml(sip_uri: str) -> str:
     Realtime SIP endpoint. Twilio requests this document once the callee
     answers.
     """
-    return f'<Response><Dial><Sip>{sip_uri}</Sip></Dial></Response>'
+    return f"<Response><Dial><Sip>{sip_uri}</Sip></Dial></Response>"
 
 
 def build_create_call_request(

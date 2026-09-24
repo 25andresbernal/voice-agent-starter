@@ -31,9 +31,9 @@ from typing import Any
 CLOSING_PHRASES = [
     "have a great day",
     "have a good day",
+    "have a wonderful day",
     "goodbye",
-    "take care",
-    "thanks for calling",
+    "take care now",
     "bye now",
 ]
 
@@ -128,8 +128,10 @@ def score_no_premature_close(turns: list[dict[str, Any]]) -> MetricResult:
             if not is_near_end:
                 flagged.append(t["turn"])
     score = 100.0 if not flagged else 0.0
-    detail = "no closing language before the caller was done" if not flagged else (
-        f"closing language appeared early, at turn(s) {flagged}"
+    detail = (
+        "no closing language before the caller was done"
+        if not flagged
+        else (f"closing language appeared early, at turn(s) {flagged}")
     )
     return MetricResult("No premature close", score, detail)
 

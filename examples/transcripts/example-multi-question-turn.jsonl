@@ -1,0 +1,7 @@
+{"call_id": "example-multi-question-turn", "turn": 1, "speaker": "assistant", "text": "Thanks for calling, how can I help?", "timestamp": "2026-09-20T09:00:00+00:00", "tool_call": null, "latency_ms": null}
+{"call_id": "example-multi-question-turn", "turn": 2, "speaker": "user", "text": "I'd like to book a haircut.", "timestamp": "2026-09-20T09:00:02+00:00", "tool_call": null, "latency_ms": null}
+{"call_id": "example-multi-question-turn", "turn": 3, "speaker": "assistant", "text": "Sure! What day works for you? And what time do you prefer? And is this your first visit with us?", "timestamp": "2026-09-20T09:00:02.500000+00:00", "tool_call": null, "latency_ms": 500}
+{"call_id": "example-multi-question-turn", "turn": 4, "speaker": "user", "text": "Thursday afternoon, and yes it's my first time.", "timestamp": "2026-09-20T09:00:05.500000+00:00", "tool_call": null, "latency_ms": null}
+{"call_id": "example-multi-question-turn", "turn": 5, "speaker": "assistant", "text": "Great, welcome. Does two p.m. Thursday work?", "timestamp": "2026-09-20T09:00:06.100000+00:00", "tool_call": null, "latency_ms": 600}
+{"call_id": "example-multi-question-turn", "turn": 6, "speaker": "user", "text": "Yes, that works.", "timestamp": "2026-09-20T09:00:07.100000+00:00", "tool_call": null, "latency_ms": null}
+{"call_id": "example-multi-question-turn", "turn": 7, "speaker": "assistant", "text": "Perfect, you're booked for two p.m. Thursday. Have a good day.", "timestamp": "2026-09-20T09:00:07.500000+00:00", "tool_call": null, "latency_ms": 400}

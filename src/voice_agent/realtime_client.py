@@ -22,9 +22,10 @@ it is a thin httpx + websockets wrapper.
 
 from __future__ import annotations
 
+from collections.abc import AsyncIterator
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Any, AsyncIterator
+from typing import Any
 
 import httpx
 import websockets
@@ -61,9 +62,7 @@ async def accept_call(
         )
 
 
-async def reject_call(
-    call_id: str, *, api_key: str, status_code: int = 603
-) -> httpx.Response:
+async def reject_call(call_id: str, *, api_key: str, status_code: int = 603) -> httpx.Response:
     async with httpx.AsyncClient() as client:
         return await client.post(
             f"{REALTIME_HTTP_BASE}/calls/{call_id}/reject",
@@ -81,7 +80,7 @@ class RealtimeWebSocketConnection:
     api_key: str
     _ws: Any = None
 
-    async def __aenter__(self) -> "RealtimeWebSocketConnection":
+    async def __aenter__(self) -> RealtimeWebSocketConnection:
         self._ws = await websockets.connect(
             f"{REALTIME_WS_BASE}?call_id={self.call_id}",
             additional_headers={"Authorization": f"Bearer {self.api_key}"},

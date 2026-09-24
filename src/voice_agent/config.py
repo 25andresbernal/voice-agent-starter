@@ -28,7 +28,7 @@ class Settings:
     public_base_url: str = ""
 
     @classmethod
-    def from_env(cls) -> "Settings":
+    def from_env(cls) -> Settings:
         return cls(
             openai_api_key=os.environ.get("OPENAI_API_KEY", ""),
             openai_project_id=os.environ.get("OPENAI_PROJECT_ID", ""),

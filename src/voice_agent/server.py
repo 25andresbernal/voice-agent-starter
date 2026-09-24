@@ -62,9 +62,7 @@ def parse_incoming_webhook(payload: dict[str, Any]) -> IncomingCall | None:
     return IncomingCall(call_id=call_id, sip_headers=headers)
 
 
-def create_app(
-    settings: Settings | None = None, registry: ToolRegistry | None = None
-) -> FastAPI:
+def create_app(settings: Settings | None = None, registry: ToolRegistry | None = None) -> FastAPI:
     settings = settings or Settings.from_env()
     registry = registry or build_default_registry()
 
@@ -102,7 +100,9 @@ def create_app(
 
 async def _handle_call(call_id: str, settings: Settings, registry: ToolRegistry) -> None:
     transcript = TranscriptWriter(call_id=call_id)
-    async with RealtimeWebSocketConnection(call_id=call_id, api_key=settings.openai_api_key) as conn:
+    async with RealtimeWebSocketConnection(
+        call_id=call_id, api_key=settings.openai_api_key
+    ) as conn:
         loop = AgentLoop(connection=conn, registry=registry, transcript=transcript)
         try:
             await loop.run()

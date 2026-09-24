@@ -31,9 +31,10 @@ Client events sent back:
 
 from __future__ import annotations
 
+from collections.abc import AsyncIterator
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, AsyncIterator, Protocol
+from typing import Any, Protocol
 
 from .tools import ToolRegistry
 from .transcript import ToolCall, TranscriptWriter

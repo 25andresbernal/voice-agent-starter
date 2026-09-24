@@ -10,9 +10,10 @@ access and no API key.
 
 from __future__ import annotations
 
+from collections.abc import AsyncIterator
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
-from typing import Any, AsyncIterator
+from typing import Any
 
 _EPOCH = datetime(2026, 9, 23, 15, 0, 0, tzinfo=timezone.utc)
 
