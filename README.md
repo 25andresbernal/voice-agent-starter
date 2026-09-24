@@ -21,7 +21,13 @@ the model provider's own SIP endpoint, and keep your server out of the
 audio path entirely. Your server's job becomes answering a webhook,
 handing back a session configuration (instructions, voice, tools), and
 watching a text-level event stream to run tool calls and write a
-transcript. See `docs/design-notes.md` for the full argument, including
+transcript.
+
+This is a reference implementation built from scratch for a fictional
+business, not a copy of any production system. The architecture is the
+one I would choose today for a phone agent, and the design notes explain
+why in terms of what went wrong with the alternatives. See
+`docs/design-notes.md` for the full argument, including
 the specific turn-taking failure modes (monologuing, premature closes, no
 mirroring) this removes and why debugging a wrapper platform in front of a
 model is hard.
